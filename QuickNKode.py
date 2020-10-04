@@ -111,10 +111,31 @@ def type_casting(data):
     return model_dataset
 
 
+# Checking the address of the CSV file entered by the user
+def address_check(address):
+    try:
+        pd.read_csv(address)
+        return 1
+    except FileNotFoundError:
+        print("\nYou entered a wrong address. Please, type the address again.")
+        print("Type below:- ")
+        return 0
+
+
+# Creating a infinite loop until the user enters a valid output
+def location_input():
+    print("\nEnter the address of the file:\n")
+    while 1:
+        address = str(input())
+        if address_check(address):
+            break
+    return address
+
+
 # This function will return the main dataset we need for encoding after type casting.
 def main_data():
     print("\n*****************************")
-    file = str(input("Enter the address of the file:- "))
+    file = location_input()
     data = pd.read_csv(file)
     data = dropped_data(data)
     operational_data = type_casting(data)
@@ -212,7 +233,7 @@ print(main_dataset.dtypes.to_frame().transpose())
 encoded_data = encoded(main_dataset)
 print("\nThe final dataset is as follows:-\n::::::::::::::::::::::::::::::::\n")
 print(encoded_data.head(5))
-print("\nEnter a name for the dataset: ")
+print("\nGive a name to the new dataset: ")
 name = str(input())
 file_name = name + ".csv"
 encoded_data.to_csv(file_name, index=False)
